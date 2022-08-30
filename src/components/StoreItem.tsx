@@ -1,3 +1,4 @@
+import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
  
 type StoreItemProps = {
@@ -8,7 +9,8 @@ type StoreItemProps = {
 }
 
 export const StoreItem = ({id, name, price, imgUrl} : StoreItemProps) => {
-    const quantity = 0
+    const {getItemQuantity, increaseCartQuantity, decreaseCardQuantity, removeFromCart} = useShoppingCart()
+    const quantity = getItemQuantity(id)
     return <div className="max-w-sm rounded overflow-hidden shadow-lg">
         <img className="w-full h-52 object-cover" src={imgUrl} alt="" />
         <div className="py-4 px-6">
@@ -18,16 +20,16 @@ export const StoreItem = ({id, name, price, imgUrl} : StoreItemProps) => {
             </div>
             <div className="mt-auto"> 
                 {quantity === 0 ? (
-                    <button className="bg-blue-400 rounded py-2 px-4 w-full">Add to cart</button>
+                    <button className="bg-blue-400 rounded py-2 px-4 w-full" onClick={() => increaseCartQuantity(id)}>Add to cart</button>
                 ) : <div className="flex items-center flex-col gap-2">
                     <div className="flex items-center gap-2 justify-center mb-2">
-                        <button className="rounded bg-sky-500 py-2 px-3">-</button>
+                        <button className="rounded bg-sky-500 py-2 px-3" onClick={() => decreaseCardQuantity(id)}>-</button>
                         <div>
                         <span className="font-semibold">{quantity}</span> in Cart
                         </div>
-                        <button className="rounded bg-sky-500 py-2 px-3">+</button>
+                        <button className="rounded bg-sky-500 py-2 px-3" onClick={() => increaseCartQuantity(id)}>+</button>
                     </div>
-                    <button className="rounded bg-red-700 py-2 px-3">Remove</button>
+                    <button className="rounded bg-red-700 py-2 px-3" onClick={() => removeFromCart(id)}>Remove</button>
                 </div> }
 
             </div> 
