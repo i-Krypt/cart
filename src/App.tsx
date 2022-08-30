@@ -1,12 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import { About } from "./pages/about";
-import { Home } from "./pages/home";
-import { Store } from "./pages/store";
+import { About } from "./pages/About";
+import { Home } from "./pages/Home";
+import { Store } from "./pages/Store";
 import { Navbar } from "./components/Navbar";
+import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 
 function App() {
   return (
-    <>
+    <ShoppingCartProvider>
       <Navbar />
       <div className="container mx-auto mb-4">
         <Routes>
@@ -15,7 +16,7 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
-    </>
+    </ShoppingCartProvider>
   );
 }
 
