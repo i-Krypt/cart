@@ -3,6 +3,7 @@ import { useShoppingCart } from "../context/ShoppingCartContext";
 
 export const Navbar = () => {
   const { openCart, cartQuantity } = useShoppingCart();
+
   return (
     <div className="sticky top-0 bg-slate-400 mb-4 p-4 flex justify-between lg:px-8">
       <div className="flex items-center space-x-4">
@@ -11,9 +12,12 @@ export const Navbar = () => {
         <Link to="/Store">Store</Link>
       </div>
       {cartQuantity > 0 && (
-        <div
+        <button
           className="py-2 px-2 rounded-full bg-sky-500 relative"
-          onClick={openCart}
+          onClick={() => {
+            console.log("Hello")
+           openCart()
+          }}
         >
           <span>
             <svg
@@ -37,7 +41,7 @@ export const Navbar = () => {
           >
             {cartQuantity}
           </div>
-        </div>
+        </button>
       )}
     </div>
   );

@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
+import { ShoppingCart } from "../components/ShoppingCart";
 
 type ShoppingCartProviderProps = {
   children: ReactNode;
@@ -18,6 +26,7 @@ type ShoppingCartContext = {
   removeFromCart: (id: number) => void;
   cartQuantity: number;
   cartItems: CartItem[];
+  isOpen: boolean;
 };
 
 const ShoppingCartContext = createContext({} as ShoppingCartContext);
@@ -29,7 +38,7 @@ export const useShoppingCart = () => {
 export const ShoppingCartProvider = ({
   children,
 }: ShoppingCartProviderProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const cartQuantity = cartItems.reduce(
@@ -37,7 +46,10 @@ export const ShoppingCartProvider = ({
     0
   );
 
-  const openCart = () => setIsOpen(true);
+  const openCart = () => {
+    console.log("inContext");
+    setIsOpen(true);
+  };
   const closeCart = () => setIsOpen(false);
 
   const getItemQuantity = (id: number) => {
@@ -84,6 +96,19 @@ export const ShoppingCartProvider = ({
     });
   };
 
+  const cartRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    document.addEventListener("click", (event: MouseEvent) => {
+      if (
+        cartRef.current &&
+        (cartRef.current == event.target ||
+          event.composedPath().includes(cartRef.current))
+      ) {
+        openCart();
+      }
+    });
+  }, []);
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -95,6 +120,7 @@ export const ShoppingCartProvider = ({
         cartQuantity,
         openCart,
         closeCart,
+        isOpen,
       }}
     >
       {children}
